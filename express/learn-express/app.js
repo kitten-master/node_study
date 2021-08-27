@@ -17,6 +17,17 @@ app.use(function(req,res,next){
   console.log(req.url,'미들웨어');
   next();
 });
+app.use(function(req,res,next){
+  if(Date.now()%2===0){
+    return res.status(404).send('50%실패');
+  }
+  else{
+    next();
+  }
+}, function(req,res,next){
+  console.log('50%성공');
+  next();
+});
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -25,12 +36,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-
+ 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
 });
-
+ 
 // error handler
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development
